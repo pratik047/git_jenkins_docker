@@ -1,173 +1,371 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jenkins + Docker | CI/CD Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My CI/CD Project | Git, Jenkins & Docker</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 18px;
-            background: linear-gradient(135deg, #eef6ff, #ffffff, #e8f2ff);
-            color: #102a56;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fc;
+    color: #172554;
+    line-height: 1.6;
+}
 
-        .container {
-            width: 100%;
-            max-width: 950px;
-            text-align: center;
-        }
+header {
+    text-align: center;
+    padding: 45px 20px 30px;
+    background: linear-gradient(120deg, #102a56, #2563eb);
+    color: white;
+}
 
-        .icons {
-            font-size: 65px;
-            margin-bottom: 25px;
-        }
+header h1 {
+    font-size: clamp(27px, 4vw, 42px);
+    margin-bottom: 10px;
+}
 
-        .icons span {
-            display: inline-block;
-            margin: 0 15px;
-        }
+header p {
+    color: #dbeafe;
+}
 
-        h1 {
-            font-size: clamp(30px, 5vw, 54px);
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
+.container {
+    max-width: 1150px;
+    margin: auto;
+    padding: 30px 20px;
+}
 
-        .subtitle {
-            font-size: clamp(17px, 2.5vw, 24px);
-            color: #60758f;
-            margin-bottom: 40px;
-        }
+.section-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-        .status {
-            display: inline-block;
-            background: #dcfce7;
-            color: #166534;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            margin-bottom: 35px;
-        }
+.ec2-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-        }
+.server {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    border: 2px solid #dbeafe;
+    box-shadow: 0 8px 24px #0f172a0b;
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 35px 25px;
-            border: 1px solid #dbeafe;
-            border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(30, 64, 175, 0.08);
-            transition: transform 0.25s, box-shadow 0.25s;
-        }
+.git-server {
+    border-top: 5px solid #16a34a;
+}
 
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 40px rgba(30, 64, 175, 0.14);
-        }
+.jenkins-server {
+    border-top: 5px solid #7c3aed;
+}
 
-        .card .icon {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
+.server h2 {
+    margin-bottom: 8px;
+    font-size: 23px;
+}
 
-        .card h2 {
-            font-size: 25px;
-            margin-bottom: 12px;
-        }
+.server-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
 
-        .card p {
-            color: #60758f;
-            line-height: 1.7;
-            font-size: 16px;
-        }
+.small {
+    color: #64748b;
+    font-size: 14px;
+}
 
-        .footer {
-            margin-top: 35px;
-            color: #718096;
-            font-size: 14px;
-        }
+.file-list, .tools {
+    margin-top: 20px;
+    padding: 17px;
+    background: #f1f5f9;
+    border-radius: 12px;
+}
 
-        @media (max-width: 600px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
+.file-list p, .tools p {
+    margin: 8px 0;
+}
 
-            .icons {
-                font-size: 48px;
-            }
+.badge {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+}
 
-            .card {
-                padding: 28px 20px;
-            }
-        }
-    </style>
+.github {
+    max-width: 650px;
+    margin: 25px auto;
+    text-align: center;
+    background: white;
+    border: 2px solid #cbd5e1;
+    border-radius: 15px;
+    padding: 23px;
+}
+
+.github h2 {
+    margin-bottom: 8px;
+}
+
+.arrow {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #2563eb;
+    padding: 8px;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.step {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    border: 1px solid #dbeafe;
+    box-shadow: 0 5px 18px #0f172a08;
+}
+
+.number {
+    display: inline-flex;
+    width: 35px;
+    height: 35px;
+    align-items: center;
+    justify-content: center;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.step h3 {
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.website {
+    margin-top: 28px;
+    background: linear-gradient(120deg, #dcfce7, #eff6ff);
+    border: 2px solid #86efac;
+    padding: 30px 20px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.website h2 {
+    margin-bottom: 10px;
+}
+
+.url {
+    display: inline-block;
+    margin: 12px 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: #fff;
+    color: #1d4ed8;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.note {
+    margin-top: 22px;
+    padding: 18px;
+    background: #fff7ed;
+    border-left: 5px solid #f59e0b;
+    border-radius: 8px;
+    color: #7c2d12;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+}
+
+@media (max-width: 750px) {
+    .ec2-grid, .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 22px 14px;
+    }
+}
+</style>
 </head>
 
 <body>
-    <main class="container">
 
-        <div class="icons">
-            <span>👨‍💻</span>
-            <span>➕</span>
-            <span>🐳</span>
-        </div>
+<header>
+    <h1>🚀 My CI/CD Automation Project</h1>
+    <p>Git + GitHub + Jenkins + Docker + AWS EC2</p>
+    <p>From source code to a live website automatically</p>
+</header>
 
-        <h1>Hello from Jenkins and Docker!</h1>
+<main class="container">
 
-        <p class="subtitle">
-            Automating deployments, one build at a time 🚀
+    <h2 class="section-title">🏗️ Project Architecture</h2>
+
+    <section class="ec2-grid">
+
+        <article class="server git-server">
+            <div class="server-icon">🖥️</div>
+            <h2>EC2 Instance 1 — Git</h2>
+            <p class="small">Code development and version control</p>
+
+            <div class="file-list">
+                <h3>📁 Project Folder</h3>
+                <p>📄 index.html</p>
+                <p>🐳 Dockerfile</p>
+                <p>📄 Other project files</p>
+            </div>
+
+            <div class="tools">
+                <h3>What happens here?</h3>
+                <p>1. Write or update application files.</p>
+                <p>2. Create a Dockerfile using Nginx.</p>
+                <p>3. Commit and push changes to GitHub.</p>
+            </div>
+
+            <span class="badge">SOURCE CODE</span>
+        </article>
+
+        <article class="server jenkins-server">
+            <div class="server-icon">⚙️</div>
+            <h2>EC2 Instance 2 — Jenkins</h2>
+            <p class="small">Continuous integration and deployment</p>
+
+            <div class="tools">
+                <h3>Installed and configured</h3>
+                <p>🐙 Git / GitHub integration</p>
+                <p>🔔 GitHub Webhook</p>
+                <p>🐳 Docker Engine</p>
+                <p>☕ Java 21 + Jenkins</p>
+            </div>
+
+            <div class="file-list">
+                <h3>Jenkins job: dbda</h3>
+                <p>✓ Fetch code from GitHub</p>
+                <p>✓ Build Docker image</p>
+                <p>✓ Run application container</p>
+            </div>
+
+            <span class="badge">BUILD & DEPLOY</span>
+        </article>
+
+    </section>
+
+    <div class="arrow">⬇️ Push source code</div>
+
+    <section class="github">
+        <div class="server-icon">🐙</div>
+        <h2>GitHub — Remote Repository</h2>
+        <p>Repository: <strong>git_jenkins_docker</strong></p>
+        <p class="small">
+            Stores the latest version of index.html, Dockerfile,
+            and other project files.
         </p>
+        <p>
+            <a href="https://github.com/pratik047/git_jenkins_docker"
+               target="_blank" rel="noopener noreferrer">
+                View GitHub Repository ↗
+            </a>
+        </p>
+    </section>
 
-        <div class="status">
-            ● CI/CD Demo Application
-        </div>
+    <div class="arrow">
+        GitHub Webhook → Jenkins pulls latest code
+    </div>
 
-        <section class="cards">
+    <h2 class="section-title">🔄 How the Pipeline Works</h2>
 
-            <div class="card">
-                <div class="icon">⚙️</div>
-                <h2>Jenkins</h2>
-                <p>
-                    Automates your builds, tests, and deployments
-                    whenever you push code to GitHub.
-                </p>
-            </div>
+    <section class="steps">
 
-            <div class="card">
-                <div class="icon">🐳</div>
-                <h2>Docker</h2>
-                <p>
-                    Packages your application into containers
-                    for consistent and reliable execution.
-                </p>
-            </div>
+        <article class="step">
+            <span class="number">1</span>
+            <h3>Push Code</h3>
+            <p>Developer updates index.html or Dockerfile and pushes the changes to GitHub.</p>
+        </article>
 
-        </section>
+        <article class="step">
+            <span class="number">2</span>
+            <h3>Trigger Jenkins</h3>
+            <p>The GitHub webhook notifies Jenkins to start the configured job.</p>
+        </article>
 
-        <footer class="footer">
-            Built with HTML, CSS, Jenkins & Docker
-            <br><br>
-            Powered by Continuous Integration and Continuous Deployment
-        </footer>
+        <article class="step">
+            <span class="number">3</span>
+            <h3>Pull Code</h3>
+            <p>Jenkins fetches the latest files from the GitHub repository into its workspace.</p>
+        </article>
 
-    </main>
+        <article class="step">
+            <span class="number">4</span>
+            <h3>Build Docker Image</h3>
+            <p>Docker reads the Dockerfile, uses nginx:alpine, and copies index.html into Nginx's web directory.</p>
+            <p><code>docker build -t myimage .</code></p>
+        </article>
+
+        <article class="step">
+            <span class="number">5</span>
+            <h3>Run Container</h3>
+            <p>Jenkins replaces the old myweb container if present, then starts a new one on port 8081.</p>
+            <p><code>docker run -d -p 8081:80 --name myweb myimage</code></p>
+        </article>
+
+        <article class="step">
+            <span class="number">6</span>
+            <h3>Access Website</h3>
+            <p>Nginx serves index.html from the running container to the user's browser.</p>
+        </article>
+
+    </section>
+
+    <section class="website">
+        <h2>🌐 Final Output — Your Website</h2>
+        <p>When the Jenkins build succeeds, open the application hosted on EC2 Instance 2.</p>
+
+        <div class="url">http://YOUR-JENKINS-EC2-PUBLIC-IP:8081</div>
+
+        <p><strong>Hello from Jenkins and Docker!</strong></p>
+        <p class="small">Replace the placeholder with the public IP of your Jenkins EC2 instance.</p>
+    </section>
+
+    <aside class="note">
+        <strong>⚠️ Important:</strong>
+        <p>
+            Ensure the Jenkins EC2 Security Group allows inbound TCP port 8081
+            from your IP address. Jenkins must have Docker permissions, and
+            index.html must exist in the root of the GitHub repository beside
+            the Dockerfile. The GitHub webhook must be configured and reachable.
+        </p>
+    </aside>
+
+</main>
+
+<footer>
+    Built as a hands-on AWS EC2, GitHub, Jenkins and Docker project.
+    <br>
+    Learn it • Build it • Automate it 🚀
+</footer>
+
 </body>
 </html>
 
